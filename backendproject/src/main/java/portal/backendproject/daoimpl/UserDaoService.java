@@ -123,4 +123,18 @@ public class UserDaoService implements UserDao {
 		
 	}
 
+	@Override
+	public List<User> getStudents() {
+		
+		try {
+			Query<User> query=sessionFactory.getCurrentSession().createQuery("from User where role='student'",User.class);
+             
+			 return query.getResultList();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

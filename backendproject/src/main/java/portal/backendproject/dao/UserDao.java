@@ -14,4 +14,5 @@ public interface UserDao {
 	public User getUserById(int user_id);
 	public User getUserByEmail(String email);
 	public List<User> getTrainers();
+	public List<User> getStudents();
 }

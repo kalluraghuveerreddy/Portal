@@ -32,14 +32,14 @@ public class IndexController {
 	private CommentDao commentDao;
 
 	@PostMapping("/register")
-	public User register(@RequestBody User user) {
+	public boolean register(@RequestBody User user) {
 
 		System.out.println(user.getName());
 
 		if (userDao.registerUser(user)) {
-			return user;
+			return true;
 		} else {
-			return null;
+			return false;
 		}
 	}
 
@@ -47,31 +47,46 @@ public class IndexController {
 	public User login(@RequestBody Login login) {
 
 		System.out.println(login.getEmail() + " " + login.getPassword());
+
 		User userDetails = userDao.loginUser(login.getEmail(), login.getPassword());
 
+		System.out.println(userDetails.getName());
+
 		if (userDetails != null) {
+
 			return userDetails;
+
 		} else {
+
 			return null;
 		}
 
 	}
 
 	@PostMapping("/addPost")
-	public String addBlog(@RequestBody Blog blog) {
+	public boolean addBlog(@RequestBody Blog blog) {
 
 		System.out.println(blog.getPost_desc());
+
 		System.out.println(blog.getUser().getUser_id());
+
 		if (blogDao.addPost(blog)) {
-			return "post added ";
+
+			return true;
 		} else {
-			return "post not added";
+
+			return false;
 		}
 	}
 
 	@GetMapping("/trainers")
 	public List<User> getTrainerDetails() {
 		return userDao.getTrainers();
+	}
+
+	@GetMapping("/student")
+	public List<User> getStudentDetails() {
+		return userDao.getStudents();
 	}
 
 	@GetMapping("/activeuser/{id}")
@@ -106,23 +121,29 @@ public class IndexController {
 
 	@GetMapping("myposts/{user_id}")
 	public List<Blog> getMyPosts(@PathVariable("user_id") int user_id) {
+
 		System.out.println("myposts get called");
 		System.out.println(user_id);
+
 		return blogDao.getAllPosts(user_id);
 	}
 
 	@PostMapping("comment")
-	public String writeComment(@RequestBody Comment comment) {
+	public boolean writeComment(@RequestBody Comment comment) {
 
-		if(commentDao.addComment(comment)) { 
-			return "comment added";
+		if (commentDao.addComment(comment)) {
+
+			return true;
+		} else {
+
+			return false;
 		}
-		return "comment not added";
+
 	}
-	
+
 	@GetMapping("getcomments/{blog_id}")
-	private List<Comment> getComments(@PathVariable("blog_id")int blog_id){
-		
+	private List<Comment> getComments(@PathVariable("blog_id") int blog_id) {
+
 		return commentDao.getComments(blog_id);
 	}
 }
